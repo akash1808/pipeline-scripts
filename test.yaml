@@ -3,7 +3,9 @@ base_url: 'https://aasemble.com/api/v2/snapshots/'
 stable_snapshot_uuid: '375854bd-589b-4b32-a855-abb8f68015cd'
 
 repositories:
-  kilodeps:
-    location: 'http://apt.overcastcloud.com/jiocloudtools/kilodeps'
+  - location: 'http://apt.overcastcloud.com/jiocloudtools/kilodeps'
+    release: 'aasemble'
+    repos: 'main'
+  - location: 'http://apt.overcastcloud.com/jiocloudtools/kilopackages'
     release: 'aasemble'
     repos: 'main'
