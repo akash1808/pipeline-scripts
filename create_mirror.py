@@ -18,7 +18,7 @@ body['components']=components
 body['public']=True
 #body=json.dumps(body)
 print body
-r = requests.post("https://aasemble.com/api/v1/mirrors/", data=body, headers=Headers2)
+r = requests.post("https://aasemble.com/api/v2/mirrors/", data=body, headers=Headers2)
 print r.content
 values = json.loads(r.content)
 print values["self"]
