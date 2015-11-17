@@ -48,8 +48,6 @@ def check_for_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
         return create_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent)
 
 
-
-
 def create_mirror_set(authtoken,mirrorselfurl):
     Headers2 = {'Authorization':'Token '+ authtoken}
     body = {}
@@ -60,6 +58,26 @@ def create_mirror_set(authtoken,mirrorselfurl):
     values = json.loads(r.content)
     return values["self"]
 
+
+def check_for_mirror_set(authtoken,mirrorselfurl):
+    Headers2 = {'Authorization':'Token '+ authtoken}
+    r = requests.get("https://aasemble.com/api/v2/mirror_sets/", headers=Headers2)
+    seriesbool=False
+    componentsbool=False
+    result=False
+    values = json.loads(r.content)
+    for count in range(0,values["count"]):
+        mirrorsets = values["results"][count]
+        mirrorset = set(mirrorsets["mirrors"])
+        if ((mirrorselfurl in mirrorset)):
+            result=True
+            break
+
+    if result:
+        return mirrorsets["self"]
+
+    else:
+        return create_mirror_set(authtoken,mirrorselfurl)
 
 
 def create_snapshot(authtoken,mirrorsetselfurl):
@@ -75,7 +93,7 @@ def create_snapshot(authtoken,mirrorsetselfurl):
 
 def main(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
     mirrorselfurl=check_for_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent)
-    mirrorsetselfurl=create_mirror_set(authtoken,mirrorselfurl)
+    mirrorsetselfurl=check_for_mirror_set(authtoken,mirrorselfurl)
     snapshot=create_snapshot(authtoken,mirrorsetselfurl)
     return snapshot
 
