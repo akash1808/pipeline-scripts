@@ -2,7 +2,7 @@ import json
 import sys
 import httplib
 import requests
-
+import time
 
 authtoken=sys.argv[1]
 mirrorurl=sys.argv[2]
@@ -42,11 +42,24 @@ def check_for_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
             break
 
     if result:
+        trigger_mirror_update(authtoken, mirrors["self"])
         return mirrors["self"]
 
     else:
         return create_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent)
-
+def trigger_mirror_update(authtoken,mirrorurl):
+    Headers2 = {'Authorization':'Token '+ authtoken}
+    url = mirrorurl+"refresh/"
+    body={}
+    r = requests.post(url, headers=Headers2)
+    refresh_happened=False
+    while(not refresh_happened):
+        time.sleep(2)
+        r = requests.get(mirrorurl, data=body, headers=Headers2)
+        values=json.loads(r.content)
+        refresh_happenning=values["refresh_in_progress"]
+        refresh_happened= not refresh_happenning
+        time.sleep(5)
 
 def create_mirror_set(authtoken,mirrorselfurl):
     Headers2 = {'Authorization':'Token '+ authtoken}

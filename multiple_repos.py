@@ -3,7 +3,7 @@ import sys
 import httplib
 import requests
 import yaml
-
+import time
 def read_from_yaml(authtoken,filename):
     with open(filename, 'r') as f:
         doc = yaml.load(f)
@@ -44,13 +44,25 @@ def check_for_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
         if ((mirrorseries in series) and (mirrorcomponent in components) and (mirrorurl == mirrors['url'])):
             result=True
             break
-
     if result:
+        trigger_mirror_update(authtoken, mirrors["self"])
         return mirrors["self"]
 
     else:
         return create_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent)
-
+def trigger_mirror_update(authtoken,mirrorurl):
+    Headers2 = {'Authorization':'Token '+ authtoken}
+    url = mirrorurl+"refresh/"
+    body={}
+    r = requests.post(url, headers=Headers2)
+    refresh_happened=False
+    while(not refresh_happened):
+        time.sleep(2)
+        r = requests.get(mirrorurl, data=body, headers=Headers2)
+        values=json.loads(r.content)
+        refresh_happenning=values["refresh_in_progress"]
+        refresh_happened= not refresh_happenning
+        time.sleep(5)
 
 def create_mirror_set(authtoken,mirrorselfurl):
     Headers2 = {'Authorization':'Token '+ authtoken}
