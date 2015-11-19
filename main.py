@@ -21,14 +21,14 @@ def create_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
     body['series']=series
     body['components']=components
     body['public']=True
-    r = requests.post("https://aasemble.com/api/v2/mirrors/", data=body, headers=Headers2)
+    r = requests.post("http://54.254.240.24/api/v2/mirrors/", data=body, headers=Headers2)
     values = json.loads(r.content)
     return values["self"]
 
 
 def check_for_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
     Headers2 = {'Authorization':'Token '+ authtoken}
-    r = requests.get("https://aasemble.com/api/v2/mirrors/", headers=Headers2)
+    r = requests.get("http://54.254.240.24/api/v2/mirrors/", headers=Headers2)
     seriesbool=False
     componentsbool=False
     result=False
@@ -67,14 +67,14 @@ def create_mirror_set(authtoken,mirrorselfurl):
     mirrors=[]
     mirrors.append(mirrorselfurl)
     body['mirrors']=mirrors
-    r = requests.post("https://aasemble.com/api/v2/mirror_sets/", data=body, headers=Headers2)
+    r = requests.post("http://54.254.240.24/api/v2/mirror_sets/", data=body, headers=Headers2)
     values = json.loads(r.content)
     return values["self"]
 
 
 def check_for_mirror_set(authtoken,mirrorselfurl):
     Headers2 = {'Authorization':'Token '+ authtoken}
-    r = requests.get("https://aasemble.com/api/v2/mirror_sets/", headers=Headers2)
+    r = requests.get("http://54.254.240.24/api/v2/mirror_sets/", headers=Headers2)
     seriesbool=False
     componentsbool=False
     result=False
@@ -99,7 +99,7 @@ def create_snapshot(authtoken,mirrorsetselfurl):
     mirrorset=[]
     mirrorset.append(mirrorsetselfurl)
     body['mirrorset']=mirrorset
-    r = requests.post("https://aasemble.com/api/v2/snapshots/", data=body, headers=Headers2)
+    r = requests.post("http://54.254.240.24/api/v2/snapshots/", data=body, headers=Headers2)
     values = json.loads(r.content)
     return values["self"]    
 
