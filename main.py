@@ -33,20 +33,23 @@ def check_for_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
     componentsbool=False
     result=False
     values = json.loads(r.content)
-    for count in range(0,values["count"]):
-        mirrors = values["results"][count]
-        series = set(mirrors["series"])
-        components = set (mirrors["components"])
-        if ((mirrorseries in series) and (mirrorcomponent in components) and (mirrorurl == mirrors['url'])):
-            result=True
-            break
+    if (count > 0):
+        for count in range(0,values["count"]):
+            mirrors = values["results"][count]
+            series = set(mirrors["series"])
+            components = set (mirrors["components"])
+            if ((mirrorseries in series) and (mirrorcomponent in components) and (mirrorurl == mirrors['url'])):
+                result=True
+                break
 
-    if result:
-        trigger_mirror_update(authtoken, mirrors["self"])
-        return mirrors["self"]
+        if result:
+            trigger_mirror_update(authtoken, mirrors["self"])
+            return mirrors["self"]
 
+        else:
+            return create_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent)
     else:
-        return create_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent)
+         return create_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent)
 def trigger_mirror_update(authtoken,mirrorurl):
     Headers2 = {'Authorization':'Token '+ authtoken}
     url = mirrorurl+"refresh/"
