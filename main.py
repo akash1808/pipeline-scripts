@@ -33,7 +33,7 @@ def check_for_mirror(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
     componentsbool=False
     result=False
     values = json.loads(r.content)
-    if (count > 0):
+    if (values["count"] > 0):
         for count in range(0,values["count"]):
             mirrors = values["results"][count]
             series = set(mirrors["series"])
