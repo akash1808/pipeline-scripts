@@ -115,4 +115,4 @@ def main(authtoken,mirrorurl,mirrorseries,mirrorcomponent):
 
 
 if __name__ == "__main__":
-     sys.exit(main(authtoken,mirrorurl,mirrorseries,mirrorcomponent))
+     print(main(authtoken,mirrorurl,mirrorseries,mirrorcomponent))
